@@ -37,6 +37,37 @@ app.post('/api/feeding',(req,res)=>{
     })
 })
 
+app.get('/api/retriving',(req,res)=>{
+    var sql=`select * from feed`;
+    con.query(sql,(err,results)=>{
+        if(err){
+            throw err;
+        }
+        res.send({results});
+        console.log(results);
+    })
+})
+
+
+app.delete('/api/delete', (req, res) => {
+    const { val, time } = req.body;
+    var sql=`delete from feed where val="${val}"`;
+    con.query(sql,(err,results)=>{
+        if(err){
+            console.error('Error deleting data from MySQL:', error);
+            res.sendStatus(500);
+        }
+        else{
+            if (results.affectedRows > 0) {
+                res.sendStatus(200);
+            } else {
+                res.sendStatus(404);
+            }
+        }
+    })
+
+});
+
 app.listen(8092,()=>{
     console.log("succesfully connected in port 8092");
 })
