@@ -1,5 +1,6 @@
 window.addEventListener('load',()=>{
     const form=document.querySelector('#form');
+    //const t=document.querySelector('#action');
     const input=document.querySelector('#task-input');
     const list=document.querySelector('.tasks');
 
@@ -34,7 +35,7 @@ window.addEventListener('load',()=>{
         const time=document.createElement('p');
         time.classList.add('date','mt-5','ml-44');
         time.innerHTML=getCurrentDateTime();
-
+        
         cont.appendChild(inn);
         cont.appendChild(time);
 
@@ -55,6 +56,25 @@ window.addEventListener('load',()=>{
 
         list.appendChild(cont);
         list.appendChild(acti);
+        var formData=new FormData(form);
+        var dat=Object.fromEntries(formData);
+        dat.time=getCurrentDateTime();
+        console.log(dat);
+        console.log(formData);
+
+
+        fetch('http://localhost:8092/api/feeding',{
+            method:'POST',
+            headers:{
+                'Content-Type':'application/json',
+                'User-Agent':'PostmanRuntime/7.30.0' 
+            },
+            body:JSON.stringify(dat)
+        })
+        .then(res=>res.json())
+        .catch(err=>{
+            console.log(err);
+        })
         input.value = '';
         edit.addEventListener('click',()=>{
             if(edit.innerHTML.toLowerCase()=='edit'){
@@ -71,7 +91,5 @@ window.addEventListener('load',()=>{
             list.removeChild(cont);
             list.removeChild(acti);
         })
-
-
     })
 })
